@@ -11,7 +11,6 @@ local M = {}
 Buffer_manager_win_id = nil
 Buffer_manager_bufh = nil
 local initial_marks = {}
-local config = buffer_manager.get_config()
 
 -- We save before we close because we use the state of the buffer as the list
 -- of items.
@@ -26,6 +25,7 @@ end
 
 local function create_window()
   log.trace("_create_window()")
+  local config = buffer_manager.get_config()
 
   local width = 60
   local height = 10
@@ -106,6 +106,7 @@ end
 
 
 local function get_mark_by_name(name, specific_marks)
+  local config = buffer_manager.get_config()
   local ref_name = nil
   local current_short_fns = {}
   for _, mark in pairs(specific_marks) do
@@ -198,6 +199,7 @@ end
 
 
 local function update_marks()
+  local config = buffer_manager.get_config()
   -- Check if any buffer has been deleted
   -- If so, remove it from marks
   for idx, mark in pairs(marks) do
@@ -224,6 +226,7 @@ end
 
 
 local function set_menu_keybindings()
+  local config = buffer_manager.get_config()
   vim.api.nvim_buf_set_keymap(
     Buffer_manager_bufh,
     "n",
@@ -284,6 +287,7 @@ end
 
 
 local function set_win_buf_options(contents, current_buf_line)
+  local config = buffer_manager.get_config()
   vim.api.nvim_set_option_value("number", true, { win = Buffer_manager_win_id })
   for key, value in pairs(config.win_extra_options) do
     vim.api.nvim_set_option_value(key, value, { win = Buffer_manager_win_id })
@@ -299,6 +303,7 @@ end
 
 function M.toggle_quick_menu()
   log.trace("toggle_quick_menu()")
+  local config = buffer_manager.get_config()
   if Buffer_manager_win_id ~= nil and vim.api.nvim_win_is_valid(Buffer_manager_win_id) then
     if vim.api.nvim_buf_get_changedtick(vim.fn.bufnr()) > 0 then
       M.on_menu_save()
@@ -546,6 +551,7 @@ end
 
 
 function M.nav_next()
+  local config = buffer_manager.get_config()
   log.trace("nav_next()")
   update_marks()
   local current_buf_line = get_current_buf_line()
@@ -564,6 +570,7 @@ end
 
 
 function M.nav_prev()
+  local config = buffer_manager.get_config()
   log.trace("nav_prev()")
   update_marks()
   local current_buf_line = get_current_buf_line()
